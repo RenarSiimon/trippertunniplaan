@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minu tunniplaan 🚀</title>
+<style>
+  :root{
+    --ink:#202033;
+    --muted:#73738c;
+    --card:#ffffffee;
+    --shadow:0 18px 45px #29234a20;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+    color:var(--ink); overflow-x:hidden;
+    background-color:#ff00a8;
+    background-image:
+      repeating-conic-gradient(from 7deg at 50% 50%, #00ffea 0deg 9deg, #ff006e 9deg 18deg),
+      repeating-radial-gradient(circle at 50% 50%, transparent 0 12px, #1aff00 12px 16px, transparent 16px 28px);
+    background-blend-mode: difference, exclusion;
+    background-size: 100% 100%, 100% 100%;
+    animation: opticalNightmare 4s linear infinite;
+  }
+  .blob{position:fixed;z-index:-1;border-radius:50%;filter:blur(2px);opacity:.6;animation:float 7s ease-in-out infinite}
+  .b1{width:120px;height:120px;background:#ffcf4a;left:4%;top:45%}
+  .b2{width:90px;height:90px;background:#8ff0c0;right:5%;top:62%;animation-delay:1s}
+  @keyframes float{50%{transform:translateY(-20px) rotate(12deg)}}
+  @keyframes opticalNightmare{
+    0%{background-position:0 0,0 0; filter:hue-rotate(0deg)}
+    50%{background-position:18px -14px,-12px 20px; filter:hue-rotate(100deg)}
+    100%{background-position:36px -28px,-24px 40px; filter:hue-rotate(200deg)}
+  }
+  body::before{
+    content:""; position:fixed; inset:-20%; z-index:-1; pointer-events:none;
+    background:repeating-radial-gradient(ellipse at center, transparent 0 22px, #000 23px 25px, transparent 26px 44px);
+    mix-blend-mode:soft-light; opacity:.72; transform:rotate(17deg) scale(1.3);
+    animation: swirl 9s linear infinite;
+  }
+  @keyframes swirl{to{transform:rotate(377deg) scale(1.3)}}
+
+  header{max-width:1400px;margin:0 auto;padding:30px 24px 15px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+  .brand h1{font-size:clamp(2rem,5vw,4rem);margin:0;font-weight:950;letter-spacing:-.06em}
+  .brand h1 span{display:inline-block;animation:wiggle 2.7s infinite}
+  @keyframes wiggle{0%,85%,100%{transform:rotate(0)}90%{transform:rotate(-4deg) scale(1.04)}95%{transform:rotate(4deg)}}
+  .brand p{margin:7px 0;color:var(--muted);font-weight:700}
+  button{
+    border:0;border-radius:18px;padding:13px 18px;font-weight:900;cursor:pointer;
+    background:linear-gradient(90deg,#ff00d4,#00ff66,#ffe600,#ff0066);color:#090909;
+    box-shadow:0 8px 0 #00000055, 0 0 22px #fff;transition:transform .12s, filter .12s;
+  }
+  button:hover{filter:saturate(3) contrast(1.4);transform:translate(
+      var(--run-x,0px),var(--run-y,0px)) rotate(var(--run-r,0deg)) scale(1.04)}
+  button.fleeing{position:relative;z-index:30}
+  button:active{transform:translateY(2px);box-shadow:none}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .today{background:#ff5d8f}
+
+  main{max-width:1400px;margin:auto;padding:15px 24px 45px}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:10px 0 18px}
+  .week{font-size:1.15rem;font-weight:950;background:#ffffffb8;padding:10px 15px;border-radius:15px;backdrop-filter:blur(10px)}
+  .legend{display:flex;gap:9px;flex-wrap:wrap}
+  .pill{font-size:.78rem;font-weight:900;background:#fff;padding:7px 10px;border-radius:999px;box-shadow:0 4px 14px #00000010}
+
+  .schedule{display:grid;grid-template-columns:110px repeat(5,minmax(150px,1fr));gap:12px;align-items:start}
+  .corner{height:58px}
+  .day{
+    padding:15px;border-radius:22px;color:white;text-align:center;font-weight:950;
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .day small{display:block;opacity:.8;margin-top:3px}
+  .d1{background:linear-gradient(135deg,#ff5d8f,#ff8a5b)}
+  .d2{background:linear-gradient(135deg,#8d65ff,#bd6cff)}
+  .d3{background:linear-gradient(135deg,#00bfa6,#4bd9b4)}
+  .d4{background:linear-gradient(135deg,#ffb000,#ffcf4a)}
+  .d5{background:linear-gradient(135deg,#20a4f3,#52c7ff)}
+
+  .time-col{display:flex;flex-direction:column;gap:12px}
+  .time{height:118px;background:#ffffffb8;border-radius:18px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:950;color:#67677d;box-shadow:0 8px 25px #0000000a}
+  .day-col{display:flex;flex-direction:column;gap:12px;min-width:0}
+  .slot{height:118px;border-radius:24px;position:relative}
+  .lesson{
+    min-height:118px;height:100%;padding:15px;border-radius:24px;color:#1e1d2e;
+    box-shadow:var(--shadow);cursor:grab;position:relative;overflow:hidden;
+    border:3px solid #ffffffaa; transition:transform .18s,box-shadow .18s; animation:cardPulse 3s ease-in-out infinite;
+    user-select:none;
+  }
+  .lesson:hover{transform:translateY(-5px) rotate(-1deg);box-shadow:0 25px 50px #29234a28}
+  .lesson:active{cursor:grabbing}
+  .lesson.dragging{opacity:.65;transform:rotate(3deg) scale(1.03)}
+  .lesson.empty{background:#ffffff55;border:2px dashed #aaa;box-shadow:none;display:flex;align-items:center;justify-content:center;color:#999;font-weight:800}
+  .subject{font-size:1.12rem;font-weight:1000}
+  .meta{font-size:.78rem;margin-top:8px;font-weight:750;opacity:.75}
+  .tag{display:inline-block;margin-top:10px;padding:5px 8px;border-radius:999px;background:#ffffffaa;font-size:.68rem;font-weight:950}
+  .emoji{position:absolute;right:-7px;bottom:-16px;font-size:52px;opacity:.42;transform:rotate(-10deg)}
+  .spark{position:absolute;right:10px;top:9px;font-size:16px}
+  .planned{outline:4px solid #ffffff;outline-offset:-7px;animation:planned 2.2s ease-in-out infinite}
+  @keyframes planned{50%{filter:saturate(1.15) brightness(1.04)}}
+  @keyframes cardPulse{
+    0%,100%{border-radius:24px}
+    50%{border-radius:8px 32px 14px 30px; transform:skewX(-.6deg)}
+  }
+
+  .math{background:#ffcedd}.estonian{background:#cfe8ff}.english{background:#d9d0ff}.physics{background:#c9f6e3}.history{background:#ffe4b8}.art{background:#fff0a9}.music{background:#d9f4ff}.pe{background:#d9ffc9}.lunch{background:#e9e1ff}
+
+  .hint{margin-top:18px;background:#ffffffbd;border-radius:22px;padding:15px 18px;font-weight:800;box-shadow:var(--shadow)}
+  .hint b{color:#ff4d82}
+
+  .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,30px);opacity:0;background:#202033;color:#fff;padding:13px 18px;border-radius:999px;font-weight:900;transition:.25s;z-index:10}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .confetti{position:fixed;width:9px;height:15px;z-index:20;pointer-events:none;animation:fall 1.1s linear forwards}
+  @keyframes fall{to{transform:translate(var(--x),100vh) rotate(720deg);opacity:0}}
+
+  @media(max-width:900px){
+    .schedule{overflow-x:auto;grid-template-columns:85px repeat(5,190px);padding-bottom:10px}
+    header{align-items:flex-start;flex-direction:column}.actions{justify-content:flex-start}
+    .toolbar{align-items:flex-start;flex-direction:column}
+  }
+
+  /* BAD UI BATTLES MODE */
+  html.bad-motion body > *{will-change:transform}
+  .chaos-cursor{
+    position:fixed;z-index:9999;pointer-events:none;font-size:28px;
+    transform:translate(-50%,-50%);filter:drop-shadow(0 0 7px #fff);
+    mix-blend-mode:multiply;display:none;
+  }
+  .decoy-cursor{
+    position:fixed;z-index:9998;pointer-events:none;font-size:22px;
+    opacity:.72;transform:translate(-50%,-50%);display:none;
+  }
+  .status-marquee{
+    position:fixed;top:0;left:0;width:100%;z-index:5000;overflow:hidden;
+    background:#000;color:#39ff14;font:900 13px monospace;white-space:nowrap;
+    border-bottom:3px solid #ff00ff;pointer-events:none;
+  }
+  .status-marquee span{display:inline-block;padding-left:100%;animation:marquee 12s linear infinite}
+  @keyframes marquee{to{transform:translateX(-100%)}}
+  .gravity-fall{animation:fallAway 1.8s cubic-bezier(.2,.9,.4,1) forwards}
+  @keyframes fallAway{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(110vh) rotate(800deg)}}
+  .screen-tilt{transform-origin:50% 50%;animation:tilt 6s ease-in-out infinite}
+  @keyframes tilt{0%,100%{transform:rotate(-.8deg)}50%{transform:rotate(.8deg)}}
+  .evil-slider{accent-color:#ff00e5;cursor:ew-resize}
+  .fake-notice{
+    position:fixed;z-index:8000;background:#ffff00;color:#000;border:5px ridge #ff00ff;
+    padding:10px 16px;font-weight:1000;box-shadow:12px 12px 0 #00ffff;
+    animation:noticeSpin 2s linear infinite;pointer-events:none;
+  }
+  @keyframes noticeSpin{50%{transform:rotate(2deg) scale(1.04)}}
+
+
+  .ad-layer{position:fixed;inset:0;z-index:7000;pointer-events:none}
+  .ad{
+    position:fixed;pointer-events:auto;width:260px;min-height:145px;padding:13px;
+    border:6px double #000;background:#fffb00;color:#111;box-shadow:12px 12px 0 #ff00ff;
+    font-family:Impact,Arial,sans-serif;transform:rotate(-2deg);animation:adPulse .8s infinite alternate;
+  }
+  .ad:nth-child(even){background:#00ffff;box-shadow:12px 12px 0 #ff5a00;transform:rotate(3deg)}
+  .ad h3{margin:0 0 5px;font-size:24px;text-transform:uppercase}
+  .ad p{margin:5px 0;font-weight:1000;font-family:Arial,sans-serif}
+  .ad .ad-x{position:absolute;right:-13px;top:-15px;border:4px solid #000;background:#f00;color:#fff;
+    width:30px;height:30px;padding:0;border-radius:50%;font-weight:1000;cursor:pointer}
+  .ad .ad-buy{border:4px outset #777;background:#fff;color:#000;padding:8px 12px;font-weight:1000;cursor:pointer}
+  .ad .ad-buy:hover{background:#ff00ff}
+  @keyframes adPulse{to{transform:rotate(3deg) scale(1.035)}}
+  .ad-ticker{position:fixed;bottom:0;left:0;width:100%;z-index:7100;background:#ff0000;color:#fff;
+    border-top:5px solid #000;border-bottom:5px solid #000;overflow:hidden;white-space:nowrap;
+    font:1000 18px Impact,Arial;padding:7px;pointer-events:none}
+  .ad-ticker span{display:inline-block;padding-left:100%;animation:marquee 7s linear infinite}
+
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div class="ad-layer" id="adLayer"></div><div class="ad-ticker"><span>🔥 OSTA MITTE MIDAGI! 90% SOODUSTUS! 🔥 KLIKI SIIA! 🔥 SULLE EI OLE MIDAGI VÕITMATA! 🔥</span></div>
+<div class="status-marquee"><span>⚠️ TUNNIPLAANI KVALITEEDIKONTROLL: 37% · HIIR ON KERGELT LIBE · KÕIK ON NORMAALNE · ÄRA USALDA NUPPE · 🫨 JIGGLE ENGINE v6.66 ·</span></div>
+<div class="chaos-cursor">🖱️</div><div class="decoy-cursor">🖱️</div>
+
+<header>
+  <div class="brand">
+    <h1>MINU TUNNIPLAAN <span>🚀</span></h1>
+    <p>Natuke kooli, natuke kaost. 100% rohkem jiggle’it.</p>
+  </div>
+  <div class="actions">
+    <button id="jiggleBtn">🫨 JIGGLE ALL</button>
+    <button class="today" id="confettiBtn">🎉 TÄNA ON HEA PÄEV</button>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar">
+    <div class="week">📅 15.–19. september 2026 · Nädal 38</div>
+    <div class="legend">
+      <button id="gravityBtn" title="Miks see siin on?">🪐 GRAVITY</button>
+      <button id="tiltBtn" title="Halb mõte">📐 TILT</button>
+      <label class="pill">SLIPPY <input id="slippy" class="evil-slider" type="range" min="0" max="100" value="68"></label>
+      <span class="pill">✨ Kavandatud</span>
+      <span class="pill">🖱️ Lohista tunde</span>
+      <span class="pill">💥 Klõpsa tunnil</span>
+    </div>
+  </div>
+
+  <section class="schedule" id="schedule">
+    <div class="corner"></div>
+    <div class="day d1">ESMASPÄEV<small>15.09</small></div>
+    <div class="day d2">TEISIPÄEV<small>16.09</small></div>
+    <div class="day d3">KOLMAPÄEV<small>17.09</small></div>
+    <div class="day d4">NELJAPÄEV<small>18.09</small></div>
+    <div class="day d5">REEDE<small>19.09</small></div>
+
+    <div class="time-col" id="times"></div>
+    <div class="day-col" data-day="0"></div>
+    <div class="day-col" data-day="1"></div>
+    <div class="day-col" data-day="2"></div>
+    <div class="day-col" data-day="3"></div>
+    <div class="day-col" data-day="4"></div>
+  </section>
+
+  <div class="hint">💡 <b>Pro tip:</b> lohista mõni tund teise kasti. Kaardid on füüsikaga varustatud — nad ei lähe päriselt katki. 😎</div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const times = ["08:00–08:45","09:00–09:45","10:00–10:45","11:00–11:45","12:00–12:45","13:00–13:45"];
+const lessons = [
+  {day:0,row:0,name:"Matemaatika",teacher:"Õp. Kati · Ruum 204",cls:"math",emoji:"🧮",tag:"TÄHTIS"},
+  {day:0,row:1,name:"Inglise keel",teacher:"Õp. Mike · Ruum 301",cls:"english",emoji:"🇬🇧"},
+  {day:0,row:3,name:"Kehaline",teacher:"Õp. Jaan · Spordisaal",cls:"pe",emoji:"🏀"},
+  {day:1,row:0,name:"Eesti keel",teacher:"Õp. Mari · Ruum 108",cls:"estonian",emoji:"📖"},
+  {day:1,row:2,name:"Füüsika",teacher:"Õp. Albert · Ruum 207",cls:"physics",emoji:"⚡",planned:true,tag:"KAVAND"},
+  {day:1,row:4,name:"Ajalugu",teacher:"Õp. Liis · Ruum 115",cls:"history",emoji:"🏛️"},
+  {day:2,row:1,name:"Kunst",teacher:"Õp. Piret · Kunstiklass",cls:"art",emoji:"🎨"},
+  {day:2,row:2,name:"Muusika",teacher:"Õp. Karl · Aula",cls:"music",emoji:"🎸"},
+  {day:2,row:5,name:"Matemaatika",teacher:"Õp. Kati · Ruum 204",cls:"math",emoji:"🤓"},
+  {day:3,row:0,name:"Füüsika",teacher:"Õp. Albert · Ruum 207",cls:"physics",emoji:"🔬"},
+  {day:3,row:1,name:"Inglise keel",teacher:"Õp. Mike · Ruum 301",cls:"english",emoji:"💬",planned:true,tag:"KAVAND"},
+  {day:3,row:3,name:"Ajalugu",teacher:"Õp. Liis · Ruum 115",cls:"history",emoji:"🗿"},
+  {day:4,row:0,name:"Muusika",teacher:"Õp. Karl · Aula",cls:"music",emoji:"🎵"},
+  {day:4,row:2,name:"Eesti keel",teacher:"Õp. Mari · Ruum 108",cls:"estonian",emoji:"✍️"},
+  {day:4,row:4,name:"Kunst",teacher:"Õp. Piret · Kunstiklass",cls:"art",emoji:"🖌️"}
+];
+
+const timesEl=document.getElementById("times");
+times.forEach(t=>{const e=document.createElement("div");e.className="time";e.textContent=t;timesEl.appendChild(e)});
+
+const cols=[...document.querySelectorAll(".day-col")];
+for(let r=0;r<times.length;r++){
+  cols.forEach(c=>{
+    const slot=document.createElement("div"); slot.className="slot"; slot.dataset.row=r; c.appendChild(slot);
+  });
+}
+lessons.forEach(addLesson);
+
+function addLesson(x){
+  const slot=cols[x.day].querySelector(`[data-row="${x.row}"]`);
+  const card=document.createElement("div");
+  card.className=`lesson ${x.cls}${x.planned?" planned":""}`;
+  card.draggable=true;
+  card.innerHTML=`<span class="spark">${x.planned?"✨":"✦"}</span>
+    <div class="subject">${x.name}</div><div class="meta">${x.teacher}</div>
+    ${x.tag?`<span class="tag">${x.tag}</span>`:""}<div class="emoji">${x.emoji}</div>`;
+  card.addEventListener("click",()=>{toast(`${x.emoji} ${x.name}: väga tubli, et sa siia klõpsasid!`); jiggle(card)});
+  card.addEventListener("dragstart",e=>{card.classList.add("dragging");e.dataTransfer.setData("text/plain","1")});
+  card.addEventListener("dragend",()=>card.classList.remove("dragging"));
+  slot.appendChild(card);
+}
+
+document.querySelectorAll(".slot").forEach(slot=>{
+  slot.addEventListener("dragover",e=>e.preventDefault());
+  slot.addEventListener("drop",e=>{
+    e.preventDefault();
+    const card=document.querySelector(".dragging");
+    if(!card)return;
+    const old=card.parentElement;
+    old.appendChild(document.createElement("span")); // creates a tiny visual "bounce" target
+    card.remove();
+    slot.innerHTML="";
+    slot.appendChild(card);
+    toast("📦 Tund kolis! Jiggle kinnitab otsuse.");
+    jiggle(card);
+  });
+});
+
+function jiggle(el){
+  el.animate([
+    {transform:"rotate(0) scale(1)"},
+    {transform:"rotate(-5deg) scale(1.04)"},
+    {transform:"rotate(5deg) scale(1.04)"},
+    {transform:"rotate(-4deg) scale(1.02)"},
+    {transform:"rotate(4deg)"},
+    {transform:"rotate(0) scale(1)"}
+  ],{duration:550,easing:"cubic-bezier(.36,.07,.19,.97)"});
+}
+function jiggleAll(){
+  document.querySelectorAll(".lesson").forEach((el,i)=>setTimeout(()=>jiggle(el),i*55));
+}
+function toast(text){
+  const t=document.getElementById("toast");t.textContent=text;t.classList.add("show");
+  clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2200);
+}
+function confetti(){
+  const symbols=["✦","★","●","◆","✿"];
+  for(let i=0;i<55;i++){
+    const p=document.createElement("div");p.className="confetti";p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    p.style.left=Math.random()*100+"vw";p.style.top=(-Math.random()*20-5)+"vh";
+    p.style.fontSize=(10+Math.random()*16)+"px";p.style.setProperty("--x",(Math.random()*240-120)+"px");
+    document.body.appendChild(p);setTimeout(()=>p.remove(),1300);
+  }
+  toast("🎉 JESS! TUNNIPLAAN ON PEOPÄE!");
+  jiggleAll();
+}
+
+// The buttons actively run away from the cursor. Move toward them slowly for maximum annoyance.
+document.querySelectorAll("button").forEach(btn=>{
+  let last=0;
+  btn.addEventListener("pointerenter",()=>btn.classList.add("fleeing"));
+  btn.addEventListener("pointermove",e=>{
+    const now=performance.now();
+    if(now-last<70) return;
+    last=now;
+    const r=btn.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    let dx=cx-e.clientX, dy=cy-e.clientY;
+    const len=Math.hypot(dx,dy)||1;
+    dx/=len; dy/=len;
+    const jump=45+Math.random()*65;
+    btn.style.setProperty("--run-x",`${dx*jump}px`);
+    btn.style.setProperty("--run-y",`${dy*jump}px`);
+    btn.style.setProperty("--run-r",`${(Math.random()*20-10).toFixed(1)}deg`);
+  });
+  btn.addEventListener("pointerleave",()=>{
+    setTimeout(()=>{
+      btn.style.setProperty("--run-x","0px");
+      btn.style.setProperty("--run-y","0px");
+      btn.style.setProperty("--run-r","0deg");
+    },120);
+  });
+});
+
+
+// Fake, deliberately obnoxious in-page advertisements.
+// They are fictional and don't navigate anywhere.
+const adLayer=document.getElementById("adLayer");
+const adCopy=[
+  ["🚨 KIIRE PAKKUMINE!","Osta nähtamatu premium-tellimus. Ainult täna 999,99€!","OSTA KOHE"],
+  ["🧦 JIGGLE-SOKID™","Sinu jalad pole piisavalt värisevad. Meie sokid on.","TAHAN VÄRINAT"],
+  ["📚 ÕPI MITTE MIDAGI","Meie kursus õpetab 47 sekundiga mitte midagi.","REGISTREERUN"],
+  ["💻 ARVUTI OPTIMEERIJA","Tuvastasime sinu arvutis 14 väga kahtlast pikslit.","PARANDA KÕIK"],
+  ["🥒 SUPERKURK","Tavaline kurk? NÕRK. Meie kurk on 400% rohkem kurk.","OSTA KURK"],
+  ["🎰 PALJU ÕNNE!","Sa võitsid võimaluse võita võimaluse võita midagi!","VÕIDA"],
+  ["👁️ ÄRA VAATA SIIA","...sa vaatasid. Nüüd on hilja.","PROOVI VEEL"]
+];
+
+function spawnAd(force=false){
+  if(!force && document.querySelectorAll(".ad").length>=7)return;
+  const [title,text,cta]=adCopy[Math.floor(Math.random()*adCopy.length)];
+  const ad=document.createElement("div"); ad.className="ad";
+  ad.innerHTML=`<button class="ad-x">X</button><h3>${title}</h3><p>${text}</p><button class="ad-buy">${cta}</button>`;
+  ad.style.left=Math.max(5,Math.random()*78)+"vw";
+  ad.style.top=Math.max(8,Math.random()*72)+"vh";
+  ad.style.zIndex=7000+Math.floor(Math.random()*500);
+  ad.querySelector(".ad-x").onclick=()=>{ad.remove();setTimeout(()=>spawnAd(true),400)};
+  ad.querySelector(".ad-buy").onclick=()=>{
+    toast("💸 Aitäh! Sa ei ostnud midagi, sest see on võltsreklaam.");
+    ad.animate([{transform:"scale(1)"},{transform:"scale(1.4) rotate(20deg)"},{transform:"scale(0)"}],{duration:500});
+    setTimeout(()=>ad.remove(),500);
+  };
+  adLayer.appendChild(ad);
+}
+for(let i=0;i<3;i++)spawnAd(true);
+setInterval(()=>spawnAd(),3000);
+setTimeout(()=>spawnAd(true),900);
+
+// Extra BadUIBattles-inspired chaos: a custom springy pointer trail and deliberately unreliable gravity/tilt.
+const root=document.documentElement;
+const cursor=document.querySelector(".chaos-cursor");
+const decoy=document.querySelector(".decoy-cursor");
+let mx=innerWidth/2,my=innerHeight/2,px=mx,py=my,dx=0,dy=0;
+addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;});
+function pointerPhysics(){
+  dx+=(mx-px)*.16; dy+=(my-py)*.16; dx*=.78; dy*=.78; px+=dx; py+=dy;
+  cursor.style.display="block"; cursor.style.left=px+"px"; cursor.style.top=py+"px";
+  decoy.style.display="block";
+  decoy.style.left=(mx+Math.sin(performance.now()/180)*70)+"px";
+  decoy.style.top=(my+Math.cos(performance.now()/210)*55)+"px";
+  requestAnimationFrame(pointerPhysics);
+}
+pointerPhysics();
+
+document.getElementById("gravityBtn").onclick=()=>{
+  document.querySelectorAll(".lesson,.day,.pill").forEach((el,i)=>{
+    setTimeout(()=>el.classList.add("gravity-fall"),i*25);
+    setTimeout(()=>el.classList.remove("gravity-fall"),2300+i*25);
+  });
+  toast("🪐 GRAVITY: kellelgi polnud seda vaja.");
+};
+
+document.getElementById("tiltBtn").onclick=()=>{
+  document.body.classList.toggle("screen-tilt");
+  toast("📐 Ekraan on nüüd 0.8° rohkem vale.");
+};
+
+document.getElementById("slippy").addEventListener("input",e=>{
+  const v=+e.target.value;
+  document.body.style.setProperty("--slip",v);
+  if(v>75) {
+    document.querySelectorAll("button").forEach(b=>{
+      b.style.transitionDuration=(.02+Math.random()*.08)+"s";
+    });
+  }
+});
+
+// Randomly relocate a harmless status label, inspired by UIs where finding things is part of the game.
+setInterval(()=>{
+  const labels=document.querySelectorAll(".pill");
+  if(!labels.length)return;
+  const el=labels[Math.floor(Math.random()*labels.length)];
+  el.style.transform=`translate(${Math.random()*26-13}px,${Math.random()*18-9}px) rotate(${Math.random()*8-4}deg)`;
+},1600);
+
+// Occasional fake warning, then it disappears. It doesn't block interaction.
+setInterval(()=>{
+  if(Math.random()>.45)return;
+  const n=document.createElement("div");
+  n.className="fake-notice";
+  n.textContent=["⚠️ HIIR ON LIIALT KINDEL","ERROR: TUND LIIGUB TAGASI","🫨 JIGGLE LEVEL: ILLEGAL","⚠️ KAS SA OLED KINDLASTI SIIN?"][Math.floor(Math.random()*4)];
+  n.style.left=(8+Math.random()*65)+"vw"; n.style.top=(12+Math.random()*65)+"vh";
+  document.body.appendChild(n);
+  setTimeout(()=>n.remove(),1700);
+},6500);
+
+document.getElementById("jiggleBtn").onclick=jiggleAll;
+document.getElementById("confettiBtn").onclick=confetti;
+</script>
+</body>
+</html>
